@@ -3,6 +3,6 @@
 
 #include "application.h"
 
-void aes_128_encrypt(int value, unsigned char key[16], unsigned char output[64]);
+void aes_128_encrypt(char *value, unsigned char key[16], char output[128]);
 
 #endif

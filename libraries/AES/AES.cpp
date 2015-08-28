@@ -16,7 +16,7 @@ void sixteenRandomBytes(unsigned char buf[16]) {
     }
 }
 
-void slice(unsigned char dest[128], unsigned char original[128], int start, int end){
+void slice(unsigned char dest[256], unsigned char original[256], int start, int end){
     int counter = 0;
     for(int i=start; i<end; i++){
         dest[counter] = original[i];
@@ -24,7 +24,7 @@ void slice(unsigned char dest[128], unsigned char original[128], int start, int 
     }
 }
 
-void append(unsigned char dest[128], unsigned char original[128], int d_len, int o_len){
+void append(char dest[256], unsigned char original[256], int d_len, int o_len){
     int counter = d_len;
     for(int i=0; i<o_len; i++){
         dest[counter] = original[i];
@@ -32,29 +32,29 @@ void append(unsigned char dest[128], unsigned char original[128], int d_len, int
     }
 }
 
-void print_char(unsigned char msg[128], size_t len){
+void print_char(unsigned char msg[256], size_t len){
     for(int i=0; i<len; i++){
         Serial.write(msg[i]);
     }
     Serial.println("");
 }
 
-void print_char(char msg[128], size_t len){
+void print_char(char msg[256], size_t len){
     for(int i=0; i<len; i++){
         Serial.write(msg[i]);
     }
     Serial.println("");
 }
 
-void aes_128_encrypt(int value, unsigned char key[16], unsigned char output[64]){
-    unsigned char buf[48];
+void aes_128_encrypt(char *value, unsigned char key[16], char output[128]){
+    unsigned char buf[112];
     unsigned char IV[16];
     //generate random IV
     sixteenRandomBytes(IV);
     //copy original IV into final output
     memcpy(output, IV, 16);
 
-    char original[48];
+    char original[112];
     String s = String(value);
     int length = s.length()+1;
     s.toCharArray(original, length);
@@ -64,5 +64,5 @@ void aes_128_encrypt(int value, unsigned char key[16], unsigned char output[64])
     aes_context aes;
     aes_setkey_enc(&aes, key, 128);
     aes_crypt_cbc(&aes, AES_ENCRYPT, paddedLength, IV, buf, buf);
-    append(output, buf, 16, sizeof(buf));
+    append(output, buf, 16, paddedLength);
 }

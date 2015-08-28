@@ -41,7 +41,7 @@ typedef struct
   // TODO: Look at setting the port by default.
   //int port = 80;
   int port;
-  String body;
+  char body[128];
 } http_request_t;
 
 /**

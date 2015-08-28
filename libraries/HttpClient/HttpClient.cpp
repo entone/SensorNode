@@ -121,7 +121,7 @@ void HttpClient::request(http_request_t &aRequest, http_response_t &aResponse, h
     // TODO: Check the standard, currently sending Content-Length : 0 for empty
     // POST requests, and no content-length for other types.
     if (aRequest.body != NULL) {
-        sendHeader("Content-Length", (aRequest.body).length());
+        sendHeader("Content-Length", sizeof(aRequest.body));
     } else if (strcmp(aHttpMethod, HTTP_METHOD_POST) == 0) { //Check to see if its a Post method.
         sendHeader("Content-Length", 0);
     }
@@ -149,7 +149,9 @@ void HttpClient::request(http_request_t &aRequest, http_response_t &aResponse, h
     //
 
     if (aRequest.body != NULL) {
-        client.println(aRequest.body);
+        //char output[128];
+        //aRequest.body.toCharArray(output, 128);
+        client.write((const uint8_t*)aRequest.body, 128);
 
         #ifdef LOGGING
         Serial.println(aRequest.body);

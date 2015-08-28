@@ -4,8 +4,7 @@
 #include "libraries/AnalogSensor/AnalogSensor.h"
 #include "libraries/DHT/DHT.h"
 #include "libraries/HttpClient/HttpClient.h"
-
-#define LOGGING;
+#include "key.h"
 
 SYSTEM_MODE(MANUAL);
 
@@ -25,8 +24,6 @@ http_header_t headers[] = {
     { "Accept" , "application/json" },
     { NULL, NULL } // NOTE: Always terminate headers will NULL
 };
-
-unsigned char KEY[16] = "111111111111111";
 
 void connect_wifi(){
     while(!WiFi.ready()){
@@ -54,21 +51,20 @@ void setup() {
     request.path = path;
 }
 
-char l_out[10];
-char p_out[10];
-char h_out[10];
-char t_out[10];
-char json_body[128];
 unsigned int nextTime = 0;
 void loop() {
     light.read();
     pot.read();
     if (nextTime > millis()) return;
     if(WiFi.ready()){
+        char json_body[128];
+        char body_out[128];
         sprintf(json_body, "{\"light\":%d , \"pot\":%d, \"temperature\":%.2f, \"humidity\":%.2f}", light.read(), pot.read(), dht.readTemperature(false), dht.readHumidity());
+        aes_128_encrypt(json_body, KEY, body_out);
         Serial.println("Body: ");
         Serial.println(json_body);
-        request.body = json_body;
+        Serial.println(sizeof(body_out));
+        memcpy(request.body, body_out, 128);
         http.post(request, response, headers);
         Serial.print("Application>\tResponse status: ");
         Serial.println(response.status);
