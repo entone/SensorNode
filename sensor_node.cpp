@@ -48,8 +48,8 @@ void setup() {
     Serial.println(request.path);
     String s_path = String("/node/"+myIDStr+"/sensors");
     s_path.toCharArray(path, 64);
-    request.ip = server;
-    request.hostname = NULL;
+    //request.ip = server;
+    request.hostname = "crtlabsdev.realtors.org";
     request.port = 80;
     request.path = path;
 }
