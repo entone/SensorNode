@@ -1,13 +1,8 @@
-compile spark code
-  1. code should be linked or available in {SPARKCORE_DIRECTORY}/core-firmware/applications
-  2. cd to {SPARKCORE_DIRECTORY}/core-firmware/build
-  3. run make APP={APPLICATION_NAME}
-
-put spark into flash mode:
+put photon into flash mode:
   1. Hold mode button
   2. press rst button
   3. wait till flashes yellow
 
-flash compiled binary to sparkcore
-  1. cd to {SPARKCORE_DIRECTORY}/core-firmware/build/
-  2. sudo dfu-util -d 1d50:607f -a 0 -s 0x08005000:leave -D applications/{APPLICATION_NAME}/{APPLICATION_NAME}.bin
+compile photon code
+  1. cd to {SPARKCORE_DIRECTORY}/firmware/modules
+  2. run `make all program-dfu PLATFORM=photon APP={APPLICATION_NAME} APPDIR={APPLICATION_DIR}`
