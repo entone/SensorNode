@@ -14,8 +14,10 @@ DHT dht(D0, DHT22);
 AnalogSensor light(A2, 1);
 AnalogSensor pot(A4, 2);
 String myIDStr = Spark.deviceID();
+String API_VERSION = String("v1.0");
 HttpClient http;
 char path[64];
+
 
 http_request_t request;
 http_response_t response;
@@ -43,7 +45,7 @@ void setup() {
     connect_wifi();
     Serial.println("running");
     Serial.println(request.path);
-    String s_path = String("/node/"+myIDStr+"/sensors");
+    String s_path = String("/api/"+API_VERSION+"/node/"+myIDStr+"/sensors");
     s_path.toCharArray(path, 64);
     //request.ip = server;
     request.hostname = "crtlabsdev.realtors.org";
