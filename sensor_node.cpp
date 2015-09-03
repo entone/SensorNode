@@ -17,6 +17,7 @@ String myIDStr = Spark.deviceID();
 String API_VERSION = String("v1.0");
 HttpClient http;
 char path[64];
+char cookie[64];
 
 
 http_request_t request;
@@ -24,6 +25,7 @@ http_response_t response;
 http_header_t headers[] = {
     { "Content-Type", "application/json" },
     { "Accept" , "application/json" },
+    { "Cookie", "lablog=2983749283749287349827349" },
     { NULL, NULL } // NOTE: Always terminate headers will NULL
 };
 
@@ -47,6 +49,8 @@ void setup() {
     Serial.println(request.path);
     String s_path = String("/api/"+API_VERSION+"/node/"+myIDStr+"/sensors");
     s_path.toCharArray(path, 64);
+    String cook = String("lablog="+myIDStr);
+    cook.toCharArray(cookie, 64);
     //request.ip = server;
     request.hostname = "crtlabsdev.realtors.org";
     request.port = 80;
