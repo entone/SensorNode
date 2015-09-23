@@ -1,9 +1,8 @@
 #include "application.h"
 #include "AnalogSensor.h"
 
-AnalogSensor::AnalogSensor(uint8_t pin, int output){
+AnalogSensor::AnalogSensor(uint8_t pin){
     _pin = pin;
-    _output = output;
     _index = 0;
     _total = 0;
     _started = false;

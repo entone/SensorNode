@@ -1,10 +1,10 @@
 #include "application.h"
 #include "DHT.h"
 
-DHT::DHT(uint8_t pin, uint8_t type, uint8_t count) {
+DHT::DHT(uint8_t pin, uint8_t type) {
     _pin = pin;
     _type = type;
-    _count = count;
+    _count = 6;
     firstreading = true;
 }
 
@@ -86,10 +86,6 @@ bool DHT::read(void) {
     uint8_t j = 0, i;
     unsigned long currenttime;
 
-    // pull the pin high and wait 250 milliseconds
-    digitalWrite(_pin, HIGH);
-    delay(250);
-
     currenttime = millis();
     if (currenttime < _lastreadtime) {
         // ie there was a rollover
@@ -100,6 +96,10 @@ bool DHT::read(void) {
         //delay(2000 - (currenttime - _lastreadtime));
         return true; // return last correct measurement
     }
+
+    // pull the pin high and wait 250 milliseconds
+    digitalWrite(_pin, HIGH);
+    delay(250);
 
     firstreading = false;
     Serial.print("Currtime: "); Serial.println(currenttime);
