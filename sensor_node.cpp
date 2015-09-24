@@ -36,6 +36,17 @@ void connect_wifi(){
     }
 }
 
+void fix_connection(){
+    Serial.println("Fixing WiFi");
+    WiFi.disconnect();
+    delay(1000);
+    WiFi.off();
+    delay(1000);
+    WiFi.on();
+    delay(1000);
+    connect_wifi();
+}
+
 void setup() {
     Serial.begin(9600);
     Serial.println("beginning");
@@ -76,8 +87,9 @@ void loop() {
         Serial.println(counter);
         Serial.print("Response status: ");
         Serial.println(response.status);
-        Serial.print("HTTP Response Body: ");
-        Serial.println(response.body);
+        if(response.status == -1){
+            fix_connection();
+        }
     }else{
         connect_wifi();
     }
