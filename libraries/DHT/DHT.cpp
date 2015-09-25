@@ -48,7 +48,7 @@ float DHT::readTemperature(bool S) {
         }
     }
 
-    return NAN;
+    return false;
 }
 
 
@@ -76,7 +76,7 @@ float DHT::readHumidity(void) {
         }
     }
 
-    return NAN;
+    return false;
 }
 
 
