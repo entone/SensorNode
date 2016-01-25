@@ -12,6 +12,7 @@ SYSTEM_MODE(MANUAL);
 DHT dht(D2, DHT22);
 DustSensor dust(D3);
 AnalogSensor light(A2);
+AnalogSensor voc(A3);
 CO2Monitor co2;
 String myIDStr = Particle.deviceID();
 String API_VERSION = String("v1.0");
@@ -51,6 +52,7 @@ void setup() {
     Serial.begin(9600);
     Serial.println("beginning");
     light.init();
+    voc.init();
     co2.init();
     dht.begin();
     dust.begin();
@@ -69,22 +71,20 @@ void setup() {
 }
 
 unsigned int nextTime = 0;
-unsigned int counter = 0;
 void loop() {
     light.read();
+    voc.read();
     dust.read();
     if (nextTime > millis()) return;
     if(WiFi.ready()){
         char json_body[128];
         char body_out[128];
-        sprintf(json_body, "{\"temperature\":%.2f, \"humidity\":%.2f, \"light\":%d , \"co2\":%d, \"dust\":%.2f}", dht.readTemperature(false), dht.readHumidity(), light.read(), co2.read(), dust.read());
+        sprintf(json_body, "{\"temperature\":%.2f, \"humidity\":%.2f, \"light\":%d , \"co2\":%d, \"voc\":%d, \"dust\":%.2f}", dht.readTemperature(false), dht.readHumidity(), light.read(), co2.read(), voc.read(), dust.read());
+        Serial.println(json_body);
         aes_128_encrypt(json_body, KEY, body_out);
         memcpy(request.body, body_out, 128);
         http.post(request, response, headers);
         nextTime = millis() + 1000;
-        counter++;
-        Serial.print("Count: ");
-        Serial.println(counter);
         Serial.print("Response status: ");
         Serial.println(response.status);
         if(response.status == -1){
