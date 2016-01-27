@@ -9,10 +9,10 @@
 
 SYSTEM_MODE(MANUAL);
 
-DHT dht(D2, DHT22);
-DustSensor dust(D3);
-AnalogSensor light(A2);
-AnalogSensor voc(A3);
+DHT dht(D4, DHT22);
+DustSensor dust(D6);
+AnalogSensor light(A0);
+AnalogSensor voc(A1);
 CO2Monitor co2;
 String myIDStr = Particle.deviceID();
 String API_VERSION = String("v1.0");
@@ -51,11 +51,6 @@ void fix_connection(){
 void setup() {
     Serial.begin(9600);
     Serial.println("beginning");
-    light.init();
-    voc.init();
-    co2.init();
-    dht.begin();
-    dust.begin();
     RGB.control(true);
     RGB.brightness(5);
     connect_wifi();
@@ -68,6 +63,11 @@ void setup() {
     request.hostname = "crtlabsdev.realtors.org";
     request.port = 80;
     request.path = path;
+    light.init();
+    voc.init();
+    co2.init();
+    dht.begin();
+    dust.begin();
 }
 
 unsigned int nextTime = 0;

@@ -1,6 +1,5 @@
 #include "application.h"
 #include "DustSensor.h"
-#include "libraries/pulseIn.h"
 #include "math.h"
 
 
