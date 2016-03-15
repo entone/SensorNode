@@ -1,0 +1,3 @@
+[submodule "libraries/MQTT"]
+	path = libraries/MQTT
+	url = git@github.com:entone/MQTT.git
