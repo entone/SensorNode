@@ -84,9 +84,20 @@ void callback(char* topic, byte* payload, unsigned int length) {
     delay(100);
 }
 
+void connect_mqtt(){
+    while(!mqtt.isConnected()){
+        mqtt.connect(myIDStr);
+        delay(1000);
+    }
+    mqtt.publish("/broadcast/new", myIDStr);//probably broadcast capabilities
+    mqtt.subscribe(String("/"+myIDStr));
+}
+
 void handle_mqtt(){
     if(mqtt.isConnected()){
         mqtt.loop();
+    }else{
+        connect_mqtt();
     }
 }
 
@@ -122,11 +133,7 @@ void setup() {
     RGB.color(0, 255, 255);
     RGB.brightness(255);
     Serial.println("running");
-    mqtt.connect(myIDStr);
-    if (mqtt.isConnected()) {
-        mqtt.publish("/broadcast/new", myIDStr);//probably broadcast capabilities
-        mqtt.subscribe(String("/"+myIDStr));
-    }
+    connect_mqtt();
     String s_path = String("/api/"+API_VERSION+"/node/"+myIDStr+"/sensors");
     s_path.toCharArray(path, 64);
     String cook = String("lablog="+myIDStr);
